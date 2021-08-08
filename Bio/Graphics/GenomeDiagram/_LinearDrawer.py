@@ -198,6 +198,15 @@ class LinearDrawer(AbstractDrawer):
                 scale_axes.append(axes)
                 scale_labels.append(slabels)
 
+            #EP - Draw left label
+            if track.left_label:
+                self.write_left_label(track)
+            
+            #EP - Draw gene lines before arrows so they are not on top
+            if track.gene_line:
+                for gene_line in track.gene_lines_list:
+                    self.draw_gene_line(gene_line)
+
         feature_cross_links = []
         for cross_link_obj in self.cross_track_links:
             cross_link_elements = self.draw_cross_link(cross_link_obj)
@@ -227,6 +236,46 @@ class LinearDrawer(AbstractDrawer):
 
         if self.tracklines:  # Draw test tracks over top of diagram
             self.draw_test_tracks()
+
+    def write_left_label(self, track):
+        """EP - Write the left label"""
+        btm, ctr, top = self.track_offsets[self.current_track_level]
+        
+        label = String(
+                0,
+                ctr+34,
+                track.name,
+                fontName=track.scale_font,
+                fontSize=track.left_label_size,
+                fillColor=track.scale_color,
+        )
+        
+        self.drawing.add(label)
+        
+
+    def draw_gene_line(self, gene_line):
+        """EP - Draw gene lines"""
+ 
+        start = gene_line[0]
+        end   = gene_line[1]
+        width = gene_line[2]
+        print(start, end)
+        # Get track location
+        btm, ctr, top = self.track_offsets[self.current_track_level]
+        
+        # adjusted based on draw_cross_link()
+        start_fragment, start_offset = self.canvas_location(start)
+        end_fragment, end_offset = self.canvas_location(end)
+        
+        xs = self.x0 + start_offset
+        xe = self.x0 + end_offset
+        
+        # I am not sure why the constant 42 is the answer but seems to work
+        # Also look at draw_test_tracks(), might help to understand
+        self.drawing.add(
+            Line(xs, ctr+42, xe, ctr+42, strokeColor=colors.black, strokeWidth=3)
+        )
+
 
     def init_fragments(self):
         """Initialize useful values for positioning diagram elements."""

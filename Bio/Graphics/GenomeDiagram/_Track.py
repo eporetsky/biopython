@@ -109,6 +109,16 @@ class Track:
         end=None,
         greytrack_font_colour=None,
         scale_colour=None,
+        
+        #EP - Parameters used in write_left_label (_LinearDrawer)
+        left_label=True,
+        left_label_size=20, 
+        
+        #EP - Parameters used in draw_gene_line (_LinearDrawer)
+        gene_line=True,
+        gene_line_width=3,
+        gene_lines_list = [],
+
     ):
         """Initialize.
 
@@ -200,6 +210,16 @@ class Track:
         self.scale_largetick_labels = scale_largetick_labels
         self.scale_smalltick_labels = scale_smalltick_labels
         self.axis_labels = axis_labels
+        
+        #EP - Parameters used in write_left_label (_LinearDrawer)
+        self.left_label = True
+        self.left_label_size=20, 
+        
+        #EP - Parameters used in draw_gene_line (_LinearDrawer)
+        self.gene_line = gene_line
+        self.gene_line_width = gene_line_width
+        self.gene_lines_list = [] #  =gene_lines_list makes it global
+
 
     def add_set(self, set):
         """Add a preexisting FeatureSet or GraphSet object to the track."""
